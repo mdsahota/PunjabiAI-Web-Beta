@@ -1,7 +1,7 @@
 "use strict";
 
 const SPEC_URL =
-    "../../01-Keyboard/Layout-Specification/keyboard-layout-v2.json";
+    "./01-Keyboard/Layout-Specification/keyboard-layout-v2.json";
 
 const EXPECTED_LAYER_COUNTS = {
     normal_layer: 46,
