@@ -25,6 +25,9 @@ const keyboardElement = document.querySelector("#keyboard");
 const writingArea = document.querySelector("#writing-area");
 const clearButton = document.querySelector("#clear-button");
 const copyButton = document.querySelector("#copy-button");
+const isTouchPrimaryDevice =
+    window.matchMedia("(pointer: coarse)").matches ||
+    navigator.maxTouchPoints > 0;
 let activeLayer = "normal_layer";
 let keyboardMode = "alphabet";
 let pendingDeadKey = null;
@@ -100,12 +103,19 @@ function showStatus(message) {
 }
 
 
+function focusWritingArea() {
+    if (!isTouchPrimaryDevice) {
+        writingArea.focus();
+    }
+}
+
+
 function insertTextAtSelection(text) {
     const start = writingArea.selectionStart;
     const end = writingArea.selectionEnd;
 
     writingArea.setRangeText(text, start, end, "end");
-    writingArea.focus();
+    focusWritingArea();
 }
 
 
@@ -113,7 +123,7 @@ async function handleCopy(copyButton) {
     const text = writingArea.value;
 
     if (text.length === 0) {
-        writingArea.focus();
+        focusWritingArea();
         return;
     }
 
@@ -131,7 +141,7 @@ async function handleCopy(copyButton) {
         console.error("Unable to copy writing-area text.", error);
     }
 
-    writingArea.focus();
+    focusWritingArea();
 }
 
 
@@ -139,7 +149,7 @@ function handleBackspace(specification) {
     if (pendingDeadKey !== null) {
         pendingDeadKey = null;
         renderKeyboard(specification);
-        writingArea.focus();
+        focusWritingArea();
         return;
     }
 
@@ -148,12 +158,12 @@ function handleBackspace(specification) {
 
     if (start !== end) {
         writingArea.setRangeText("", start, end, "end");
-        writingArea.focus();
+        focusWritingArea();
         return;
     }
 
     if (start === 0) {
-        writingArea.focus();
+        focusWritingArea();
         return;
     }
 
@@ -162,14 +172,14 @@ function handleBackspace(specification) {
     const lastCodePoint = codePoints.pop();
 
     if (lastCodePoint === undefined) {
-        writingArea.focus();
+        focusWritingArea();
         return;
     }
 
     const deleteStart = start - lastCodePoint.length;
 
     writingArea.setRangeText("", deleteStart, start, "end");
-    writingArea.focus();
+    focusWritingArea();
 }
 
 
@@ -221,7 +231,7 @@ function handleKeyInput(
     if (deadKeyDefinition !== undefined) {
         pendingDeadKey = identifier;
         renderKeyboard(specification);
-        writingArea.focus();
+        focusWritingArea();
         return;
     }
 
@@ -308,7 +318,7 @@ function createModeButton(specification) {
         }
 
         renderKeyboard(specification);
-        writingArea.focus();
+        focusWritingArea();
     });
 
     return button;
@@ -489,14 +499,14 @@ function selectLayer(specification, layerName) {
     activeLayer = layerName;
 
     renderKeyboard(specification);
-    writingArea.focus();
+    focusWritingArea();
 }
 
 
 function handleClear() {
     writingArea.value = "";
     pendingDeadKey = null;
-    writingArea.focus();
+    focusWritingArea();
 }
 
 
@@ -612,7 +622,7 @@ async function main() {
         });
 
         renderKeyboard(specification);
-        writingArea.focus();
+        focusWritingArea();
     } catch (error) {
         showStatus(
             `Unable to load PunjabiAI keyboard specification: ` +
