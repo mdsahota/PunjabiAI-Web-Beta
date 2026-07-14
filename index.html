@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PunjabiAI Web MVP</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <main class="app-shell">
+        <header class="app-header">
+            <h1>PunjabiAI</h1>
+        </header>
+
+        <section class="editor-panel">
+            <div
+                class="editor-actions"
+                aria-label="Writing actions"
+            >
+                <button
+                    id="clear-button"
+                    class="toolbar-button"
+                    type="button"
+                    disabled
+                >
+                    Clear
+                </button>
+
+                <button
+                    id="copy-button"
+                    class="toolbar-button"
+                    type="button"
+                    disabled
+                >
+                    Copy
+                </button>
+            </div>
+
+            <textarea
+                id="writing-area"
+                rows="10"
+                lang="pa"
+                spellcheck="false"
+                placeholder="Start writing Punjabi here..."
+            ></textarea>
+        </section>
+
+        <section
+            id="keyboard"
+            class="keyboard-section"
+            aria-label="PunjabiAI on-screen keyboard"
+        >
+            <p>PunjabiAI keyboard loading...</p>
+        </section>
+    </main>
+
+    <script src="./app.js"></script>
+</body>
+</html>
